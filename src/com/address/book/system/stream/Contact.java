@@ -2,8 +2,7 @@ package com.address.book.system.stream;
 
 import java.util.Objects;
 
-public class Contact {
-
+public class Contact implements Comparable<Contact>{
     private String firstName;
     private String lastName;
     private String address;
@@ -13,8 +12,9 @@ public class Contact {
     private String phoneNumber;
     private String email;
 
-    public Contact(String firstName, String lastName, String address, String city, String state, String zip,
-                   String phoneNumber, String email) {
+    // Constructor
+    public Contact(String firstName, String lastName, String address, String city,
+                   String state, String zip, String phoneNumber, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -88,20 +88,18 @@ public class Contact {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Contact contact = (Contact) o;
-        return Objects.equals(firstName, contact.firstName) && Objects.equals(lastName, contact.lastName);
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(firstName, lastName);
+    public int compareTo(Contact other) {
+        int lastNameComparison = this.lastName.compareTo(other.lastName);
+        if (lastNameComparison != 0) {
+            return lastNameComparison;
+        }
+        return this.firstName.compareTo(other.firstName);
     }
-
     @Override
     public String toString() {
         return "Contact{" +
@@ -115,5 +113,18 @@ public class Contact {
                 ", email='" + email + '\'' +
                 '}';
     }
-}
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contact contact = (Contact) o;
+        return Objects.equals(firstName, contact.firstName) &&
+                Objects.equals(lastName, contact.lastName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName);
+    }
+}

@@ -4,110 +4,53 @@ import java.util.List;
 import java.util.Scanner;
 
 public class AddressBookMain {
-    private static final Scanner scanner = new Scanner(System.in);
-
     public static void main(String[] args) {
-        AddressBook addressBook = new AddressBook();
+        Scanner scanner=new Scanner(System.in);
+        AddressBookSystem addressBookSystem = new AddressBookSystem();
 
         while (true) {
-            displayMenu();
+            System.out.println("\nAddress Book System Menu:");
+            System.out.println("1. Add new Address Book");
+            System.out.println("2. Select Address Book");
+            System.out.println("3. Display Address Books");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+
             int choice = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); // Consume the newline character
 
             switch (choice) {
                 case 1:
-                    addContact(addressBook);
+                    System.out.print("Enter the name of the new Address Book: ");
+                    String newAddressBookName = scanner.nextLine();
+                    addressBookSystem.addAddressBook(newAddressBookName);
                     break;
+
                 case 2:
-                    displaySortedByCity(addressBook);
+                    System.out.print("Enter the name of the Address Book to select: ");
+                    String selectedAddressBookName = scanner.nextLine();
+                    AddressBook selectedAddressBook = addressBookSystem.getAddressBook(selectedAddressBookName);
+
+                    if (selectedAddressBook != null) {
+                        selectedAddressBook.mainMenu();
+                    } else {
+                        System.out.println("Address Book not found.");
+                    }
                     break;
+
                 case 3:
-                    displaySortedByState(addressBook);
+                    addressBookSystem.displayAddressBooks();
                     break;
+
                 case 4:
-                    displaySortedByZip(addressBook);
-                    break;
-                case 5:
-                    displayAllContacts(addressBook);
-                    break;
-                case 0:
-                    System.out.println("Exiting the program. Goodbye!");
+                    System.out.println("Exiting Address Book System. Goodbye!");
                     System.exit(0);
+                    break;
+
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("Invalid choice. Please enter a valid option.");
             }
         }
     }
 
-    private static void displayMenu() {
-        System.out.println("\nMenu:");
-        System.out.println("1. Add Contact");
-        System.out.println("2. Display Contacts Sorted by City");
-        System.out.println("3. Display Contacts Sorted by State");
-        System.out.println("4. Display Contacts Sorted by Zip");
-        System.out.println("5. Display All Contacts");
-        System.out.println("0. Exit");
-        System.out.print("Enter your choice: ");
-    }
-
-    private static void addContact(AddressBook addressBook) {
-        System.out.println("\nAdding a new contact:");
-
-        System.out.print("Enter first name: ");
-        String firstName = scanner.nextLine();
-
-        System.out.print("Enter last name: ");
-        String lastName = scanner.nextLine();
-
-        System.out.print("Enter address: ");
-        String address = scanner.nextLine();
-
-        System.out.print("Enter city: ");
-        String city = scanner.nextLine();
-
-        System.out.print("Enter state: ");
-        String state = scanner.nextLine();
-
-        System.out.print("Enter zip: ");
-        String zip = scanner.nextLine();
-
-        System.out.print("Enter phone number: ");
-        String phoneNumber = scanner.nextLine();
-
-        System.out.print("Enter email: ");
-        String email = scanner.nextLine();
-
-        Contact newContact = new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
-        addressBook.addContact(newContact);
-
-        System.out.println("Contact added successfully!");
-    }
-
-    private static void displaySortedByCity(AddressBook addressBook) {
-        List<Contact> sortedContacts = addressBook.getContactsSortedByCity();
-        displaySortedContacts("City", sortedContacts);
-    }
-
-    private static void displaySortedByState(AddressBook addressBook) {
-        List<Contact> sortedContacts = addressBook.getContactsSortedByState();
-        displaySortedContacts("State", sortedContacts);
-    }
-
-    private static void displaySortedByZip(AddressBook addressBook) {
-        List<Contact> sortedContacts = addressBook.getContactsSortedByZip();
-        displaySortedContacts("Zip", sortedContacts);
-    }
-
-    private static void displayAllContacts(AddressBook addressBook) {
-        addressBook.displayContacts();
-    }
-
-    private static void displaySortedContacts(String sortBy, List<Contact> sortedContacts) {
-        System.out.println("\nContacts Sorted by " + sortBy + ":");
-        if (sortedContacts.isEmpty()) {
-            System.out.println("No contacts found.");
-        } else {
-            sortedContacts.forEach(contact -> System.out.println(contact));
-        }
-    }
 }
